@@ -43,3 +43,8 @@ Cuando un issue esté terminado, se debe abrir un Pull Request hacia main
 * El PR no puede ser fusionado por la misma persona que lo creó.
 * Al menos uno distinto de nosotros debe revisar el código, entenderlo y aprobarlo. Esta es nuestra principal forma de hacer que los tres conozcamos el código y el funcionamiento para luego hacer la entrevista.
 
+#### 4. Compilación y ejecución (windows/Node.js)
+El uso de TypeScript y ANTLR nos permite abstraernos del sistema operativo. Solo necesitamos tener instalado Node.js y Java.
+
+
+
