@@ -16,15 +16,15 @@ Para no estar tipeando comandos gigantes en la terminal, dejé estos atajos en e
 ### Para generar el Parser/Lexer con ANTLR:
 Cada vez que modifiquen un archivo .g2 (la gramatica), tienen que correr esto para que ANTLR lo actualice:
 
-Para el Certamen: npm run build:antlr:turing
-Parar el control 1: npm run build:antlr:stream
+- Para el Certamen: npm run build:antlr:turing
+- Para el control 1: npm run build:antlr:stream
 
 ANTLR está configurado para generar el patrón Visitor automáticamente, así que usaremos eso para recorrer los árboles.
 
 ### Para probar el código:
 
-Para la Máquina de Turing: npm run start:turing
-Para el Control de Topologias: npm run start:stream
+- Para la Máquina de Turing: npm run start:turing
+- Para el Control de Topologias: npm run start:stream
 
 ### Como trabajaremos:
 
