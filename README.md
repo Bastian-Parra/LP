@@ -18,3 +18,20 @@ Cada vez que modifiquen un archivo .g2 (la gramatica), tienen que correr esto pa
 
 Para el Certamen: npm run build:antlr:turing
 Parar el control 1: npm run build:antlr:stream
+
+ANTLR está configurado para generar el patrón Visitor automáticamente, así que usaremos eso para recorrer los árboles.
+
+### Para probar el código:
+
+Para la Máquina de Turing: npm run start:turing
+Para el Control de Topologias: npm run start:stream
+
+### Como trabajaremos:
+
+Para asegurarnos de que todos entendamos el código del otro:
+
+1. No pusheen a main directo
+2. Creen una rama para su tarea: git checkout -b funcionalidad/mi-tarea
+3. Cuando terminen, abren un Pull Request (PR)
+4. Alguien más del equipo tiene que revisar ese PR, entenderlo y aprobarlo. Así todos estudiamos el código de todos.
+
