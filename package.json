@@ -1,0 +1,34 @@
+{
+  "name": "lp",
+  "version": "1.0.0",
+  "description": "\"# LP\"",
+  "main": "index.js",
+  "scripts": {
+    "build:antlr:stream": "antlr4ts -visitor -no-listener Controles/Control_1_Stream/Stream.g4 -o Controles/Control_1_Stream/src/parser",
+    "build:antlr:turing": "antlr4ts -visitor -no-listener Proyecto_Certamen/grammar/Turing.g4 -o Proyecto_Certamen/src/parser",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:turing": "ts-node Proyecto_Certamen/src/index.ts",
+    "start:stream": "ts-node Controles/Control_1_Stream/src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bastian-Parra/LP.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Bastian-Parra/LP/issues"
+  },
+  "homepage": "https://github.com/Bastian-Parra/LP#readme",
+  "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.2",
+    "antlr4ts-cli": "^0.5.0-alpha.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  }
+}
