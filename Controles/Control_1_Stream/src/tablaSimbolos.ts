@@ -1,5 +1,5 @@
 // Importamos Nodo porque esta tabla guardara nodos.
-import { Nodo } from "./types";
+import type { Nodo } from "./types";
 
 
 // ======================================================

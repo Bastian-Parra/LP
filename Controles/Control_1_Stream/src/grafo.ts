@@ -1,24 +1,24 @@
-// Importamos el enum porque lo usamos para saber el tipo de cada nodo.
+// Importamos el enum para revisar el tipo de cada nodo.
 import { TipoNodo } from "./types";
 
-// Importamos solo los tipos que necesitamos.
+// Importamos los tipos que usa el grafo.
 import type { Nodo, Grafo as GrafoContrato } from "./types";
 
-// Usamos la tabla de simbolos para guardar y buscar los nodos.
+// Usamos la tabla para guardar y buscar nodos.
 import { TablaSimbolos } from "./tablaSimbolos";
 
 
 // ======================================================
 // GRAFO
-// Guarda los nodos y las conexiones de la topologia.
+// Guarda los nodos y conexiones de la topologia.
 // ======================================================
 
 export class Grafo implements GrafoContrato {
 
-    // Tabla donde se guardan todos los nodos declarados.
+    // Guarda todos los nodos declarados.
     private tablaSimbolos: TablaSimbolos;
 
-    // Guarda las conexiones entre los nodos.
+    // Guarda las conexiones entre nodos.
     // Ejemplo: "f1" -> ["op1", "op2"]
     private adyacencias: Map<string, string[]>;
 
@@ -30,10 +30,10 @@ export class Grafo implements GrafoContrato {
 
     constructor() {
 
-        // Creamos una tabla de simbolos vacia.
+        // Creamos la tabla de simbolos.
         this.tablaSimbolos = new TablaSimbolos();
 
-        // Creamos el mapa donde guardaremos las conexiones.
+        // Creamos el mapa de conexiones.
         this.adyacencias = new Map<string, string[]>();
     }
 
@@ -45,10 +45,10 @@ export class Grafo implements GrafoContrato {
 
     agregarNodo(nodo: Nodo): void {
 
-        // La tabla se encarga de revisar que el id no este repetido.
+        // La tabla revisa que el id no este repetido.
         this.tablaSimbolos.registrarNodo(nodo);
 
-        // Creamos su lista de conexiones vacia.
+        // El nodo comienza sin conexiones.
         this.adyacencias.set(nodo.id, []);
     }
 
@@ -60,28 +60,24 @@ export class Grafo implements GrafoContrato {
 
     conectar(idOrigen: string, idDestino: string): void {
 
-        // Revisamos que el nodo de origen exista.
+        // Revisamos que el origen exista.
         if (!this.tablaSimbolos.existeNodo(idOrigen)) {
-
-            // No se puede conectar desde un nodo inexistente.
             throw new Error(
                 `Error semantico: el nodo origen '${idOrigen}' no existe.`
             );
         }
 
-        // Revisamos que el nodo de destino exista.
+        // Revisamos que el destino exista.
         if (!this.tablaSimbolos.existeNodo(idDestino)) {
-
-            // No se puede conectar hacia un nodo inexistente.
             throw new Error(
                 `Error semantico: el nodo destino '${idDestino}' no existe.`
             );
         }
 
-        // Buscamos las conexiones actuales del nodo origen.
+        // Buscamos las conexiones del nodo origen.
         const conexiones = this.adyacencias.get(idOrigen);
 
-        // Esto no deberia pasar porque el nodo ya fue validado.
+        // Esto no deberia pasar porque el origen ya fue validado.
         if (conexiones === undefined) {
             throw new Error(
                 `No se encontraron conexiones para '${idOrigen}'.`
@@ -91,7 +87,7 @@ export class Grafo implements GrafoContrato {
         // Evitamos guardar dos veces la misma conexion.
         if (!conexiones.includes(idDestino)) {
 
-            // Agregamos el destino a la lista del origen.
+            // Agregamos el destino.
             conexiones.push(idDestino);
         }
     }
@@ -99,12 +95,12 @@ export class Grafo implements GrafoContrato {
 
     // ======================================================
     // OBTENER NODO
-    // Busca un nodo por su identificador.
+    // Busca un nodo por su id.
     // ======================================================
 
     obtenerNodo(id: string): Nodo | undefined {
 
-        // La tabla de simbolos hace la busqueda.
+        // La tabla hace la busqueda.
         return this.tablaSimbolos.obtenerNodo(id);
     }
 
@@ -116,32 +112,32 @@ export class Grafo implements GrafoContrato {
 
     obtenerAdyacentes(id: string): Nodo[] {
 
-        // Buscamos los ids conectados desde este nodo.
+        // Buscamos las conexiones del nodo.
         const conexiones = this.adyacencias.get(id);
 
-        // Si el nodo no existe, no podemos buscar sus conexiones.
+        // Si no existe, no podemos buscar sus conexiones.
         if (conexiones === undefined) {
             throw new Error(
                 `El nodo '${id}' no existe en el grafo.`
             );
         }
 
-        // Aqui guardaremos los nodos encontrados.
+        // Aqui guardamos los nodos encontrados.
         const nodosAdyacentes: Nodo[] = [];
 
-        // Recorremos cada id conectado.
+        // Recorremos cada conexion.
         for (const idDestino of conexiones) {
 
-            // Buscamos el nodo real usando su id.
+            // Buscamos el nodo usando su id.
             const nodo = this.tablaSimbolos.obtenerNodo(idDestino);
 
-            // Si existe, lo agregamos al resultado.
+            // Si existe, lo agregamos.
             if (nodo !== undefined) {
                 nodosAdyacentes.push(nodo);
             }
         }
 
-        // Entregamos todos los nodos encontrados.
+        // Entregamos los nodos encontrados.
         return nodosAdyacentes;
     }
 
@@ -153,39 +149,39 @@ export class Grafo implements GrafoContrato {
 
     obtenerNodos(): Nodo[] {
 
-        // La tabla ya tiene todos los nodos registrados.
+        // La tabla ya tiene todos los nodos.
         return this.tablaSimbolos.obtenerTodos();
     }
 
 
     // ======================================================
     // VALIDAR ESTRUCTURA
-    // Revisa que exista al menos una fuente y un sumidero.
+    // Revisa que exista una fuente y un sumidero.
     // ======================================================
 
     validarEstructura(): void {
 
-        // Obtenemos todos los nodos creados.
+        // Obtenemos todos los nodos.
         const nodos = this.tablaSimbolos.obtenerTodos();
 
-        // Revisamos si existe al menos una fuente.
+        // Revisamos si existe una fuente.
         const existeFuente = nodos.some(
             nodo => nodo.tipo === TipoNodo.FUENTE
         );
 
-        // Revisamos si existe al menos un sumidero.
+        // Revisamos si existe un sumidero.
         const existeSumidero = nodos.some(
             nodo => nodo.tipo === TipoNodo.SUMIDERO
         );
 
-        // Una topologia necesita al menos una fuente.
+        // Debe existir al menos una fuente.
         if (!existeFuente) {
             throw new Error(
                 "Error estructural: la topologia necesita al menos una FUENTE."
             );
         }
 
-        // Una topologia necesita al menos un sumidero.
+        // Debe existir al menos un sumidero.
         if (!existeSumidero) {
             throw new Error(
                 "Error estructural: la topologia necesita al menos un SUMIDERO."
