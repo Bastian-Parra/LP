@@ -1,4 +1,4 @@
-import { Nodo, TipoNodo, GrafoTopologia } from "./types";
+import { Nodo, TipoNodo, Operador, Grafo } from "./types";
 
 export class Simulador {
   // es un diccionario para llevar el registro del balanceo
@@ -11,7 +11,9 @@ export class Simulador {
    */
 
   public simular(grafo: GrafoTopologia, cantidadEventos: number): void {
-    const fuentes = grafo.obtenerFuentes();
+    const fuentes = grafo
+      .obtenerNodos()
+      .filter((nodo) => nodo.tipo === TipoNodo.FUENTE);
 
     // se ejecuta la cantidad de eventos que solicita SIMULAR
     for (let i = 1; i <= cantidadEventos; i++) {
@@ -33,7 +35,7 @@ export class Simulador {
     trazaActual: string,
     tiempoAcumulado: number,
   ): void {
-    const destinos = grafo.adyacentes.get(actual.id) || [];
+    const destinos = grafo.obtenerAdyacentes(actual.id);
 
     // esta es la condicion de parada o el caso base de la funcion recursiva: si no hay destinos, se llega al final del flujo
     if (destinos.length === 0) {
@@ -43,29 +45,23 @@ export class Simulador {
     }
 
     // iteramos todos los nodos a los que nodoActual envia tuplas
-    destinos.forEach((idDestino: string) => {
-      const destino = grafo.nodos.get(idDestino)!;
+    destinos.forEach((destino: Nodo) => {
       let trazaActualizada = trazaActual;
       let tiempoNuevo = tiempoAcumulado;
 
       if (destino.tipo === TipoNodo.OPERADOR) {
-        // se calcula que replica toca
-        const claveRR = `${actual.id}->${destino.id}`;
-        const replicaActual = this.balancearCarga(
-          claveRR,
-          destino.replicas || 1,
-        );
+        const operador = destino as Operador;
 
-        // usamos esa variable para armar el texto
-        const sufijoReplica =
-          destino.replicas && destino.replicas > 1 ? `_R${replicaActual}` : "";
+        const claveRR = `${actual.id}->${operador.id}`;
+        const replicaActual = this.balancearCarga(claveRR, operador.replicas);
 
-        trazaActualizada += ` -> OPERADOR ${destino.id}${sufijoReplica} (T: ${destino.tiempoServicio})`;
-        tiempoNuevo += destino.tiempoServicio || 0;
+        const sufijoReplica = operador.replicas > 1 ? `_R${replicaActual}` : "";
+        trazaActualizada += ` -> OPERADOR ${operador.id}${sufijoReplica} (T: ${operador.tiempoServicio})`;
+        tiempoNuevo += operador.tiempoServicio;
       } else if (destino.tipo === TipoNodo.SUMIDERO) {
         trazaActualizada += ` -> SUMIDERO ${destino.id}`;
       }
-      // es la llamada recursiva para avanzar al sgte nodo
+
       this.recorrerFlujo(
         grafo,
         destino,
