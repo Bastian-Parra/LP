@@ -1,0 +1,139 @@
+// Generated from Controles/Control_1_Stream/Stream.g4 by ANTLR 4.9.0-SNAPSHOT
+
+
+import { ATN } from "antlr4ts/atn/ATN";
+import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
+import { CharStream } from "antlr4ts/CharStream";
+import { Lexer } from "antlr4ts/Lexer";
+import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
+import { NotNull } from "antlr4ts/Decorators";
+import { Override } from "antlr4ts/Decorators";
+import { RuleContext } from "antlr4ts/RuleContext";
+import { Vocabulary } from "antlr4ts/Vocabulary";
+import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
+
+import * as Utils from "antlr4ts/misc/Utils";
+
+
+export class StreamLexer extends Lexer {
+	public static readonly FUENTE = 1;
+	public static readonly OPERADOR = 2;
+	public static readonly SUMIDERO = 3;
+	public static readonly CONECTAR = 4;
+	public static readonly SIMULAR = 5;
+	public static readonly TIEMPO_SERVICIO = 6;
+	public static readonly REPLICAS = 7;
+	public static readonly A = 8;
+	public static readonly ID = 9;
+	public static readonly NUMERO = 10;
+	public static readonly WS = 11;
+
+	// tslint:disable:no-trailing-whitespace
+	public static readonly channelNames: string[] = [
+		"DEFAULT_TOKEN_CHANNEL", "HIDDEN",
+	];
+
+	// tslint:disable:no-trailing-whitespace
+	public static readonly modeNames: string[] = [
+		"DEFAULT_MODE",
+	];
+
+	public static readonly ruleNames: string[] = [
+		"FUENTE", "OPERADOR", "SUMIDERO", "CONECTAR", "SIMULAR", "TIEMPO_SERVICIO", 
+		"REPLICAS", "A", "ID", "NUMERO", "WS",
+	];
+
+	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
+		undefined, "'FUENTE'", "'OPERADOR'", "'SUMIDERO'", "'CONECTAR'", "'SIMULAR'", 
+		"'TIEMPO_SERVICIO'", "'REPLICAS'", "'A'",
+	];
+	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
+		undefined, "FUENTE", "OPERADOR", "SUMIDERO", "CONECTAR", "SIMULAR", "TIEMPO_SERVICIO", 
+		"REPLICAS", "A", "ID", "NUMERO", "WS",
+	];
+	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(StreamLexer._LITERAL_NAMES, StreamLexer._SYMBOLIC_NAMES, []);
+
+	// @Override
+	// @NotNull
+	public get vocabulary(): Vocabulary {
+		return StreamLexer.VOCABULARY;
+	}
+	// tslint:enable:no-trailing-whitespace
+
+
+	constructor(input: CharStream) {
+		super(input);
+		this._interp = new LexerATNSimulator(StreamLexer._ATN, this);
+	}
+
+	// @Override
+	public get grammarFileName(): string { return "Stream.g4"; }
+
+	// @Override
+	public get ruleNames(): string[] { return StreamLexer.ruleNames; }
+
+	// @Override
+	public get serializedATN(): string { return StreamLexer._serializedATN; }
+
+	// @Override
+	public get channelNames(): string[] { return StreamLexer.channelNames; }
+
+	// @Override
+	public get modeNames(): string[] { return StreamLexer.modeNames; }
+
+	public static readonly _serializedATN: string =
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x02\rq\b\x01\x04" +
+		"\x02\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04" +
+		"\x07\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x03\x03\x03\x03\x03\x03" +
+		"\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x04\x03\x04\x03\x04\x03" +
+		"\x04\x03\x04\x03\x04\x03\x04\x03\x04\x03\x04\x03\x05\x03\x05\x03\x05\x03" +
+		"\x05\x03\x05\x03\x05\x03\x05\x03\x05\x03\x05\x03\x06\x03\x06\x03\x06\x03" +
+		"\x06\x03\x06\x03\x06\x03\x06\x03\x06\x03\x07\x03\x07\x03\x07\x03\x07\x03" +
+		"\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03" +
+		"\x07\x03\x07\x03\x07\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03\b\x03" +
+		"\b\x03\t\x03\t\x03\n\x03\n\x07\na\n\n\f\n\x0E\nd\v\n\x03\v\x06\vg\n\v" +
+		"\r\v\x0E\vh\x03\f\x06\fl\n\f\r\f\x0E\fm\x03\f\x03\f\x02\x02\x02\r\x03" +
+		"\x02\x03\x05\x02\x04\x07\x02\x05\t\x02\x06\v\x02\x07\r\x02\b\x0F\x02\t" +
+		"\x11\x02\n\x13\x02\v\x15\x02\f\x17\x02\r\x03\x02\x06\x04\x02C\\c|\x06" +
+		"\x022;C\\aac|\x03\x022;\x05\x02\v\f\x0F\x0F\"\"\x02s\x02\x03\x03\x02\x02" +
+		"\x02\x02\x05\x03\x02\x02\x02\x02\x07\x03\x02\x02\x02\x02\t\x03\x02\x02" +
+		"\x02\x02\v\x03\x02\x02\x02\x02\r\x03\x02\x02\x02\x02\x0F\x03\x02\x02\x02" +
+		"\x02\x11\x03\x02\x02\x02\x02\x13\x03\x02\x02\x02\x02\x15\x03\x02\x02\x02" +
+		"\x02\x17\x03\x02\x02\x02\x03\x19\x03\x02\x02\x02\x05 \x03\x02\x02\x02" +
+		"\x07)\x03\x02\x02\x02\t2\x03\x02\x02\x02\v;\x03\x02\x02\x02\rC\x03\x02" +
+		"\x02\x02\x0FS\x03\x02\x02\x02\x11\\\x03\x02\x02\x02\x13^\x03\x02\x02\x02" +
+		"\x15f\x03\x02\x02\x02\x17k\x03\x02\x02\x02\x19\x1A\x07H\x02\x02\x1A\x1B" +
+		"\x07W\x02\x02\x1B\x1C\x07G\x02\x02\x1C\x1D\x07P\x02\x02\x1D\x1E\x07V\x02" +
+		"\x02\x1E\x1F\x07G\x02\x02\x1F\x04\x03\x02\x02\x02 !\x07Q\x02\x02!\"\x07" +
+		"R\x02\x02\"#\x07G\x02\x02#$\x07T\x02\x02$%\x07C\x02\x02%&\x07F\x02\x02" +
+		"&\'\x07Q\x02\x02\'(\x07T\x02\x02(\x06\x03\x02\x02\x02)*\x07U\x02\x02*" +
+		"+\x07W\x02\x02+,\x07O\x02\x02,-\x07K\x02\x02-.\x07F\x02\x02./\x07G\x02" +
+		"\x02/0\x07T\x02\x0201\x07Q\x02\x021\b\x03\x02\x02\x0223\x07E\x02\x023" +
+		"4\x07Q\x02\x0245\x07P\x02\x0256\x07G\x02\x0267\x07E\x02\x0278\x07V\x02" +
+		"\x0289\x07C\x02\x029:\x07T\x02\x02:\n\x03\x02\x02\x02;<\x07U\x02\x02<" +
+		"=\x07K\x02\x02=>\x07O\x02\x02>?\x07W\x02\x02?@\x07N\x02\x02@A\x07C\x02" +
+		"\x02AB\x07T\x02\x02B\f\x03\x02\x02\x02CD\x07V\x02\x02DE\x07K\x02\x02E" +
+		"F\x07G\x02\x02FG\x07O\x02\x02GH\x07R\x02\x02HI\x07Q\x02\x02IJ\x07a\x02" +
+		"\x02JK\x07U\x02\x02KL\x07G\x02\x02LM\x07T\x02\x02MN\x07X\x02\x02NO\x07" +
+		"K\x02\x02OP\x07E\x02\x02PQ\x07K\x02\x02QR\x07Q\x02\x02R\x0E\x03\x02\x02" +
+		"\x02ST\x07T\x02\x02TU\x07G\x02\x02UV\x07R\x02\x02VW\x07N\x02\x02WX\x07" +
+		"K\x02\x02XY\x07E\x02\x02YZ\x07C\x02\x02Z[\x07U\x02\x02[\x10\x03\x02\x02" +
+		"\x02\\]\x07C\x02\x02]\x12\x03\x02\x02\x02^b\t\x02\x02\x02_a\t\x03\x02" +
+		"\x02`_\x03\x02\x02\x02ad\x03\x02\x02\x02b`\x03\x02\x02\x02bc\x03\x02\x02" +
+		"\x02c\x14\x03\x02\x02\x02db\x03\x02\x02\x02eg\t\x04\x02\x02fe\x03\x02" +
+		"\x02\x02gh\x03\x02\x02\x02hf\x03\x02\x02\x02hi\x03\x02\x02\x02i\x16\x03" +
+		"\x02\x02\x02jl\t\x05\x02\x02kj\x03\x02\x02\x02lm\x03\x02\x02\x02mk\x03" +
+		"\x02\x02\x02mn\x03\x02\x02\x02no\x03\x02\x02\x02op\b\f\x02\x02p\x18\x03" +
+		"\x02\x02\x02\x06\x02bhm\x03\b\x02\x02";
+	public static __ATN: ATN;
+	public static get _ATN(): ATN {
+		if (!StreamLexer.__ATN) {
+			StreamLexer.__ATN = new ATNDeserializer().deserialize(Utils.toCharArray(StreamLexer._serializedATN));
+		}
+
+		return StreamLexer.__ATN;
+	}
+
+}
+
