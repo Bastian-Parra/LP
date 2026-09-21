@@ -1,25 +1,35 @@
-// zona de pruebas:
+import * as fs from 'fs';
+import { CharStreams, CommonTokenStream } from 'antlr4ts';
+import { StreamLexer } from './parser/StreamLexer';
+import { StreamParser } from './parser/StreamParser';
+import { ConstructorGrafo } from './ConstructorGrafo';
+import { Simulador } from './simulador';
 
-import { TipoNodo, Operador } from "./types";
-import { Grafo } from "./grafo"
-import { Simulador } from "./simulador";
+// leemos ela rchivo de texto topologia.sp
+const rutaArchivo = 'Controles/Control_1_Stream/src/topologia.sp';
 
-console.log("iniciando simulador de topologías stream processing...");
+console.log(`🌊 Iniciando lectura de ${rutaArchivo}...\n`);
 
-// instancia del grafo real
-const grafo = new Grafo()
+const texto = fs.readFileSync(rutaArchivo, 'utf-8');
 
-// se agregan los nodos usando la validación de la tabla de simbolos:
-grafo.agregarNodo({ id: "q1", tipo: TipoNodo.FUENTE });
-grafo.agregarNodo({ id: "op1", tipo: TipoNodo.OPERADOR, tiempoServicio: 5, replicas: 2 } as Operador);
-grafo.agregarNodo({ id: "s1", tipo: TipoNodo.SUMIDERO });
+// pasamos el txt al lexer y al parser
+const chars = CharStreams.fromString(texto);
+const lexer = new StreamLexer(chars);
+const tokens = new CommonTokenStream(lexer);
+const parser = new StreamParser(tokens);
 
-// conectamos los nodos
-grafo.conectar("q1", "op1")
-grafo.conectar("op1", "s1")
+// aqui se procesa el texto y construimos el grafo
+const arbol = parser.programa(); // inicia leyendo las reglas
+const constructorGrafo = new ConstructorGrafo();
+constructorGrafo.visit(arbol); 
 
-// debemos validar que la estructura sea correcta (que tenga fuente y sumidero)
-grafo.validarEstructura()
+const grafo = constructorGrafo.grafo;
+const cantidadEventos = constructorGrafo.cantidadEventos;
 
-const simulacion = new Simulador();
-simulacion.simular(grafo, 5); // simulacion de 3 eventos de prueba
+// aqui validamos que la estructura esté correcta (Fuente y Sumidero existen)
+grafo.validarEstructura();
+console.log(`✅ Topologia cargada correctamente, eventos a simular: ${cantidadEventos}\n`);
+
+// simulamos
+const simulador = new Simulador();
+simulador.simular(grafo, cantidadEventos);
