@@ -8,7 +8,7 @@ import { Simulador } from './simulador';
 // leemos ela rchivo de texto topologia.sp
 const rutaArchivo = 'Controles/Control_1_Stream/src/topologia.sp';
 
-console.log(`🌊 Iniciando lectura de ${rutaArchivo}...\n`);
+console.log(`Iniciando lectura de ${rutaArchivo}...\n`);
 
 const texto = fs.readFileSync(rutaArchivo, 'utf-8');
 
@@ -28,7 +28,7 @@ const cantidadEventos = constructorGrafo.cantidadEventos;
 
 // aqui validamos que la estructura esté correcta (Fuente y Sumidero existen)
 grafo.validarEstructura();
-console.log(`✅ Topologia cargada correctamente, eventos a simular: ${cantidadEventos}\n`);
+console.log(`Topologia cargada correctamente, eventos a simular: ${cantidadEventos}\n`);
 
 // simulamos
 const simulador = new Simulador();
