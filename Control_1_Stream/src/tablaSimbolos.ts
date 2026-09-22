@@ -1,78 +1,45 @@
-// Importamos Nodo porque esta tabla guardara nodos.
 import type { Nodo } from "./types";
 
-
-// ======================================================
-// TABLA DE SIMBOLOS
-// Guarda los nodos declarados y evita ids repetidos.
-// ======================================================
-
+// esta es la tabla de simbolos que guarda los nodos y evita ids repetidos
 export class TablaSimbolos {
+  // aca quedan los nodos guardados usando el id como llave
+  private nodos: Map<string, Nodo>;
 
-    // Guarda cada nodo usando su id como clave.
-    private nodos: Map<string, Nodo>;
+  // empezamos con la tabla en blanco
+  constructor() {
+    // prendemos el mapa donde van los nodos
+    this.nodos = new Map<string, Nodo>();
+  }
 
-    // Crea una tabla vacia al comenzar.
-    constructor() {
-
-        // Inicializamos el Map donde guardaremos los nodos.
-        this.nodos = new Map<string, Nodo>();
+  // registramos un nodo nuevo si es que no esta
+  registrarNodo(nodo: Nodo): void {
+    // vemos si el id ya se uso antes
+    if (this.nodos.has(nodo.id)) {
+      // si ya esta, tiramos error pa que no se repita
+      throw new Error(
+        `Error semantico: el nodo '${nodo.id}' ya fue declarado.`,
+      );
     }
 
+    // si pasa la prueba, procedemos a guardarlo
+    this.nodos.set(nodo.id, nodo);
+  }
 
-    // ======================================================
-    // REGISTRAR NODO
-    // Agrega un nodo siempre que su id no exista.
-    // ======================================================
+  // buscar un nodo especifico por el id
+  obtenerNodo(id: string): Nodo | undefined {
+    // lo devuelve si lo encuentra, sino tira undefined
+    return this.nodos.get(id);
+  }
 
-    registrarNodo(nodo: Nodo): void {
+  // para ver rapidamente si existe un nodo en la tabla
+  existeNodo(id: string): boolean {
+    // retorna true o false
+    return this.nodos.has(id);
+  }
 
-        // Revisamos si ya existe un nodo con el mismo id.
-        if (this.nodos.has(nodo.id)) {
-
-            // Si existe, detenemos el proceso porque esta repetido.
-            throw new Error(
-                `Error semantico: el nodo '${nodo.id}' ya fue declarado.`
-            );
-        }
-
-        // Si no existe, guardamos el nodo.
-        this.nodos.set(nodo.id, nodo);
-    }
-
-
-    // ======================================================
-    // OBTENER NODO
-    // Busca un nodo usando su id.
-    // ======================================================
-
-    obtenerNodo(id: string): Nodo | undefined {
-
-        // Devuelve el nodo o undefined si no existe.
-        return this.nodos.get(id);
-    }
-
-
-    // ======================================================
-    // EXISTE NODO
-    // Sirve para revisar rapidamente si un nodo existe.
-    // ======================================================
-
-    existeNodo(id: string): boolean {
-
-        // Devuelve true o false.
-        return this.nodos.has(id);
-    }
-
-
-    // ======================================================
-    // OBTENER TODOS
-    // Entrega todos los nodos guardados.
-    // ======================================================
-
-    obtenerTodos(): Nodo[] {
-
-        // Convertimos los valores del Map a un arreglo.
-        return Array.from(this.nodos.values());
-    }
+  // obtenemos todos los nodos juntos
+  obtenerTodos(): Nodo[] {
+    // pasamos el mapa a un a un arreglo para que sea más facil de usar o manipular
+    return Array.from(this.nodos.values());
+  }
 }

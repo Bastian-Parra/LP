@@ -1,103 +1,68 @@
-// ======================================================
-// TIPOS DE NODOS
-// Tipos de nodos que puede tener la topologia.
-// ======================================================
-
+// tipos de nodos que puede tener la red
 export enum TipoNodo {
-    // Nodo que genera tuplas.
-    FUENTE,
-
-    // Nodo que procesa tuplas.
-    OPERADOR,
-
-    // Nodo final que recibe las tuplas.
-    SUMIDERO
+  FUENTE,
+  OPERADOR,
+  SUMIDERO,
 }
 
-
-// ======================================================
-// NODO
-// Base que comparten todos los nodos.
-// ======================================================
-
+// base que tienen en comun todos los nodos
 export interface Nodo {
-    // Identificador unico del nodo.
-    id: string;
+  // nombre o id unico del nodo
+  id: string;
 
-    // Tipo del nodo.
-    tipo: TipoNodo;
+  // que tipo de nodo es
+  tipo: TipoNodo;
 }
 
-
-// ======================================================
-// OPERADOR
-// Nodo que procesa las tuplas.
-// ======================================================
-
+// el nodo que hace el trabajo pesado
 export interface Operador extends Nodo {
-    // Un operador siempre debe ser de este tipo.
-    tipo: TipoNodo.OPERADOR;
+  // siempre tiene que ser tipo operador
+  tipo: TipoNodo.OPERADOR;
 
-    // Tiempo que demora en procesar una tupla.
-    tiempoServicio: number;
+  // lo que se demora en procesar un dato
+  tiempoServicio: number;
 
-    // Cantidad de replicas del operador.
-    replicas: number;
+  // cuantas copias o replicas tiene este operador
+  replicas: number;
 }
 
-
-// ======================================================
-// GRAFO
-// Define lo que debe poder hacer nuestro grafo.
-// ======================================================
-
+// lo que tiene que poder hacer el grafo
 export interface Grafo {
-    // Agrega un nodo al grafo.
-    agregarNodo(nodo: Nodo): void;
+  // mete un nodo a la red
+  agregarNodo(nodo: Nodo): void;
 
-    // Conecta dos nodos.
-    conectar(idOrigen: string, idDestino: string): void;
+  // hace una conexion de un nodo a otro
+  conectar(idOrigen: string, idDestino: string): void;
 
-    // Busca un nodo por su id.
-    obtenerNodo(id: string): Nodo | undefined;
+  // busca un nodo usando su id
+  obtenerNodo(id: string): Nodo | undefined;
 
-    // Entrega los nodos conectados desde otro nodo.
-    obtenerAdyacentes(id: string): Nodo[];
+  // te da los nodos que estan conectados a este
+  obtenerAdyacentes(id: string): Nodo[];
 
-    // Entrega todos los nodos guardados.
-    obtenerNodos(): Nodo[];
+  // te devuelve todos los nodos de la red
+  obtenerNodos(): Nodo[];
 
-    // Revisa que el grafo sea valido.
-    validarEstructura(): void;
+  // revisa que todo el grafo este bien armado
+  validarEstructura(): void;
 }
 
-
-// ======================================================
-// TUPLA
-// Informacion usada durante la simulacion.
-// ======================================================
-
+// los datos que se mueven en la simulacion
 export interface Tupla {
-    // Numero del evento.
-    idEvento: number;
+  idEvento: number;
 
-    // Guarda el camino recorrido.
-    trazaActual: string[];
+  // guarda por donde ha pasado la tupla
+  trazaActual: string[];
 
-    // Guarda el tiempo total acumulado.
-    tiempoAcumulado: number;
+  // suma del tiempo que se ha demorado en el viaje
+  tiempoAcumulado: number;
 }
 
-
-// ======================================================
-// SIMULADOR
-// Metodos que utilizara la parte de simulacion.
-// ======================================================
-
+// lo que necesita el simulador para funcionar
 export interface Simulador {
-    // Ejecuta los eventos sobre el grafo.
-    ejecutar(grafo: Grafo, cantidadEventos: number): void;
+  // corre todos los eventos en el grafo
+  ejecutar(grafo: Grafo, cantidadEventos: number): void;
 
-    // Decide que replica recibe la siguiente tupla.
-    balancearCarga(operadorDestino: Operador): number;
+  // decide a cual replica le toca recibir el dato
+  balancearCarga(operadorDestino: Operador): number;
 }
