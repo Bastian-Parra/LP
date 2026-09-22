@@ -1,4 +1,4 @@
-// Generated from Controles/Control_1_Stream/Stream.g4 by ANTLR 4.9.0-SNAPSHOT
+// Generated from src/Stream.g4 by ANTLR 4.9.0-SNAPSHOT
 
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";

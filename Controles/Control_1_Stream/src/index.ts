@@ -6,7 +6,7 @@ import { ConstructorGrafo } from './ConstructorGrafo';
 import { Simulador } from './simulador';
 
 // leemos ela rchivo de texto topologia.sp
-const rutaArchivo = 'Controles/Control_1_Stream/src/topologia.sp';
+const rutaArchivo = 'src/topologia.sp';
 
 console.log(`Iniciando lectura de ${rutaArchivo}...\n`);
 
