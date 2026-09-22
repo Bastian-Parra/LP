@@ -14,7 +14,8 @@ El proyecto está desarrollado en TypeScript utilizando Node.js y ANTLR4 para el
 
 ## Prerequisitos:
 - Node.js instalado.
-Dependencias instaladas (ejecutar `npm install` en la raíz del proyecto).
+- Dirigirse al directorio Control_1_Stream del proyecto.
+- Dependencias instaladas (ejecutar `npm install` en la raíz del proyecto).
 
 ### Uso del Makefile
 Se ha incluido un archivo `Makefile` para facilitar la compilación y ejecución del proyecto.
