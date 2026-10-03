@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "antlr": "antlr4 -Dlanguage=TypeScript src/grammar/Turing.g4 -o src/grammar/generated",
+    "antlr": "antlr4 -Dlanguage=TypeScript -visitor src/grammar/Turing.g4 -o src/grammar/generated",
     "build": "npm run antlr && tsc",
     "start": "tsx src/index.ts"
   },
