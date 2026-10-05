@@ -4,6 +4,8 @@ import {ParseTreeListener} from "antlr4";
 
 
 import { ProgramaContext } from "./TuringParser.js";
+import { MaquinaContext } from "./TuringParser.js";
+import { NombreMaquinaContext } from "./TuringParser.js";
 import { AlfabetoContext } from "./TuringParser.js";
 import { ListaSimbolosContext } from "./TuringParser.js";
 import { EstadosContext } from "./TuringParser.js";
@@ -11,6 +13,10 @@ import { ListaEstadosContext } from "./TuringParser.js";
 import { InicialContext } from "./TuringParser.js";
 import { FinalContext } from "./TuringParser.js";
 import { BlancoContext } from "./TuringParser.js";
+import { SubrutinaContext } from "./TuringParser.js";
+import { EntradaSubrutinaContext } from "./TuringParser.js";
+import { SalidaSubrutinaContext } from "./TuringParser.js";
+import { UsoSubrutinaContext } from "./TuringParser.js";
 import { TransicionesContext } from "./TuringParser.js";
 import { TransicionContext } from "./TuringParser.js";
 import { DireccionContext } from "./TuringParser.js";
@@ -32,6 +38,26 @@ export default class TuringListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitPrograma?: (ctx: ProgramaContext) => void;
+	/**
+	 * Enter a parse tree produced by `TuringParser.maquina`.
+	 * @param ctx the parse tree
+	 */
+	enterMaquina?: (ctx: MaquinaContext) => void;
+	/**
+	 * Exit a parse tree produced by `TuringParser.maquina`.
+	 * @param ctx the parse tree
+	 */
+	exitMaquina?: (ctx: MaquinaContext) => void;
+	/**
+	 * Enter a parse tree produced by `TuringParser.nombreMaquina`.
+	 * @param ctx the parse tree
+	 */
+	enterNombreMaquina?: (ctx: NombreMaquinaContext) => void;
+	/**
+	 * Exit a parse tree produced by `TuringParser.nombreMaquina`.
+	 * @param ctx the parse tree
+	 */
+	exitNombreMaquina?: (ctx: NombreMaquinaContext) => void;
 	/**
 	 * Enter a parse tree produced by `TuringParser.alfabeto`.
 	 * @param ctx the parse tree
@@ -102,6 +128,46 @@ export default class TuringListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitBlanco?: (ctx: BlancoContext) => void;
+	/**
+	 * Enter a parse tree produced by `TuringParser.subrutina`.
+	 * @param ctx the parse tree
+	 */
+	enterSubrutina?: (ctx: SubrutinaContext) => void;
+	/**
+	 * Exit a parse tree produced by `TuringParser.subrutina`.
+	 * @param ctx the parse tree
+	 */
+	exitSubrutina?: (ctx: SubrutinaContext) => void;
+	/**
+	 * Enter a parse tree produced by `TuringParser.entradaSubrutina`.
+	 * @param ctx the parse tree
+	 */
+	enterEntradaSubrutina?: (ctx: EntradaSubrutinaContext) => void;
+	/**
+	 * Exit a parse tree produced by `TuringParser.entradaSubrutina`.
+	 * @param ctx the parse tree
+	 */
+	exitEntradaSubrutina?: (ctx: EntradaSubrutinaContext) => void;
+	/**
+	 * Enter a parse tree produced by `TuringParser.salidaSubrutina`.
+	 * @param ctx the parse tree
+	 */
+	enterSalidaSubrutina?: (ctx: SalidaSubrutinaContext) => void;
+	/**
+	 * Exit a parse tree produced by `TuringParser.salidaSubrutina`.
+	 * @param ctx the parse tree
+	 */
+	exitSalidaSubrutina?: (ctx: SalidaSubrutinaContext) => void;
+	/**
+	 * Enter a parse tree produced by `TuringParser.usoSubrutina`.
+	 * @param ctx the parse tree
+	 */
+	enterUsoSubrutina?: (ctx: UsoSubrutinaContext) => void;
+	/**
+	 * Exit a parse tree produced by `TuringParser.usoSubrutina`.
+	 * @param ctx the parse tree
+	 */
+	exitUsoSubrutina?: (ctx: UsoSubrutinaContext) => void;
 	/**
 	 * Enter a parse tree produced by `TuringParser.transiciones`.
 	 * @param ctx the parse tree

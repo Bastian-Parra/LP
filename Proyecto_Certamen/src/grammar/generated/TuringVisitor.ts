@@ -4,6 +4,8 @@ import {ParseTreeVisitor} from 'antlr4';
 
 
 import { ProgramaContext } from "./TuringParser.js";
+import { MaquinaContext } from "./TuringParser.js";
+import { NombreMaquinaContext } from "./TuringParser.js";
 import { AlfabetoContext } from "./TuringParser.js";
 import { ListaSimbolosContext } from "./TuringParser.js";
 import { EstadosContext } from "./TuringParser.js";
@@ -11,6 +13,10 @@ import { ListaEstadosContext } from "./TuringParser.js";
 import { InicialContext } from "./TuringParser.js";
 import { FinalContext } from "./TuringParser.js";
 import { BlancoContext } from "./TuringParser.js";
+import { SubrutinaContext } from "./TuringParser.js";
+import { EntradaSubrutinaContext } from "./TuringParser.js";
+import { SalidaSubrutinaContext } from "./TuringParser.js";
+import { UsoSubrutinaContext } from "./TuringParser.js";
 import { TransicionesContext } from "./TuringParser.js";
 import { TransicionContext } from "./TuringParser.js";
 import { DireccionContext } from "./TuringParser.js";
@@ -31,6 +37,18 @@ export default class TuringVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitPrograma?: (ctx: ProgramaContext) => Result;
+	/**
+	 * Visit a parse tree produced by `TuringParser.maquina`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitMaquina?: (ctx: MaquinaContext) => Result;
+	/**
+	 * Visit a parse tree produced by `TuringParser.nombreMaquina`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitNombreMaquina?: (ctx: NombreMaquinaContext) => Result;
 	/**
 	 * Visit a parse tree produced by `TuringParser.alfabeto`.
 	 * @param ctx the parse tree
@@ -73,6 +91,30 @@ export default class TuringVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitBlanco?: (ctx: BlancoContext) => Result;
+	/**
+	 * Visit a parse tree produced by `TuringParser.subrutina`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSubrutina?: (ctx: SubrutinaContext) => Result;
+	/**
+	 * Visit a parse tree produced by `TuringParser.entradaSubrutina`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitEntradaSubrutina?: (ctx: EntradaSubrutinaContext) => Result;
+	/**
+	 * Visit a parse tree produced by `TuringParser.salidaSubrutina`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSalidaSubrutina?: (ctx: SalidaSubrutinaContext) => Result;
+	/**
+	 * Visit a parse tree produced by `TuringParser.usoSubrutina`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitUsoSubrutina?: (ctx: UsoSubrutinaContext) => Result;
 	/**
 	 * Visit a parse tree produced by `TuringParser.transiciones`.
 	 * @param ctx the parse tree
