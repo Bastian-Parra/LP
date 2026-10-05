@@ -7,7 +7,8 @@
   "scripts": {
     "antlr": "antlr4 -Dlanguage=TypeScript -visitor src/grammar/Turing.g4 -o src/grammar/generated",
     "build": "npm run antlr && tsc",
-    "start": "tsx src/index.ts"
+    "start": "tsx src/index.ts",
+    "test:grammar": "tsx src/grammar/probarGramatica.ts"
   },
   "dependencies": {
     "antlr4": "^4.13.2"

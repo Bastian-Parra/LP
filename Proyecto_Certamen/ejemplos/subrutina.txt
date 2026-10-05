@@ -1,0 +1,20 @@
+SUBRUTINA: escribir_unos(n: ENTERO) {
+ESTADOS: e0, eF
+ENTRADA: e0
+SALIDA: eF
+
+TRANSICIONES:
+e0, _ -> 1, R, eF
+}
+
+MAQUINA: PruebaSubrutina
+ALFABETO: 1, _
+ESTADOS: q0, qF
+INICIAL: q0
+FINAL: qF
+BLANCO: _
+
+USA: escribir_unos(3) COMO llamada1
+
+TRANSICIONES:
+q0, _ -> _, N, qF

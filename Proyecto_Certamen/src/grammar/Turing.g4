@@ -1,23 +1,30 @@
 grammar Turing;
 
 
+// Un archivo puede tener subrutinas y una o más maquinas
 
-// REGLAS DEL PARSER
-// Acá se define cómo tiene que venir escrito nuestro lenguaje
-
-
-
-// Esta es la regla principal
 programa
-    : alfabeto
+    : (subrutina | maquina)+ EOF
+    ;
+
+
+maquina
+    : nombreMaquina?
+      alfabeto
       estados
       inicial
       final
       blanco
+      usoSubrutina*
       transiciones
-      EOF
     ;
 
+
+// Esto nos permite despues escribir por ejemplo:
+// MAQUINA: Incrementador
+nombreMaquina
+    : MAQUINA DOS_PUNTOS ID
+    ;
 
 
 // ALFABETO: 0, 1, _
@@ -26,11 +33,10 @@ alfabeto
     ;
 
 
-// Permite tener uno o más símbolos separados por coma.
+// Puede haber uno o mas simbolos separados por coma
 listaSimbolos
     : simbolo (COMA simbolo)*
     ;
-
 
 
 // ESTADOS: q0, q_add, q_rewind, qF
@@ -39,7 +45,7 @@ estados
     ;
 
 
-// Los estados van separados por comaa
+// Lista de estados separados por coma
 listaEstados
     : ID (COMA ID)*
     ;
@@ -51,9 +57,12 @@ inicial
     ;
 
 
+
+// Ejemplo:
 // FINAL: qF
+// FINAL: qF, qError
 final
-    : FINAL DOS_PUNTOS ID
+    : FINAL DOS_PUNTOS listaEstados
     ;
 
 
@@ -63,12 +72,71 @@ blanco
     ;
 
 
-// Después de trasncisiones pueden venir una o más transiciones.
-transiciones
-    : TRANSICIONES DOS_PUNTOS transicion+
+// Ejemplo:
+//
+// SUBRUTINA: escribir_unos(n: ENTERO) {
+//     ESTADOS: e0, eF
+//     ENTRADA: e0
+//     SALIDA: eF
+//
+//     TRANSICIONES:
+//     e0, _ -> 1, R, eF
+// }
+//
+// La gramatica solamente reconoce la estructura.
+// La expansion real de la subrutina corresponde
+// a la parte semantica.
+subrutina
+    : SUBRUTINA DOS_PUNTOS
+      ID
+      PARENTESIS_IZQ
+      ID DOS_PUNTOS ENTERO
+      PARENTESIS_DER
+      LLAVE_IZQ
+
+      estados
+      entradaSubrutina
+      salidaSubrutina
+      transiciones
+
+      LLAVE_DER
     ;
 
 
+// Estado por donde comienza una subrutinaa
+entradaSubrutina
+    : ENTRADA DOS_PUNTOS ID
+    ;
+
+
+// Una subrutina puede tener una o varias salidas
+salidaSubrutina
+    : SALIDA DOS_PUNTOS listaEstados
+    ;
+
+
+// Ejemplo:
+//
+// USA: escribir_unos(3) COMO llamada1
+//
+// El numero es el valor que se le pasa al parametro
+// El nombre despues de COMO identifica esta llamada,
+// lo que sirve para que los estados no choquen con otros.
+usoSubrutina
+    : USA DOS_PUNTOS
+      ID
+      PARENTESIS_IZQ NUMERO PARENTESIS_DER
+      COMO ID
+    ;
+
+
+// Después de TRANSICIONES: pueden venir varias reglas.
+//
+// se deja * en vez de + porque una maquina podria armarse
+// principalmente mediante una subrutina
+transiciones
+    : TRANSICIONES DOS_PUNTOS transicion*
+    ;
 
 
 // q0, 0 -> 0, R, q0
@@ -83,7 +151,7 @@ transicion
     ;
 
 
-// Los movimientos que usa nuestro simulador son:
+// Movimientos que usa el simulador:
 // L = izquierda
 // R = derecha
 // N = no mover
@@ -94,23 +162,20 @@ direccion
     ;
 
 
-
-// un número, el blanco "_" o un identificador.
-//
+// Un simbolo puede ser un numero,
+// el blanco "_" o un identificador.
 simbolo
     : NUMERO
     | GUION_BAJO
     | ID
     ;
+ 
 
+// Palabras principales de las maquinas.
+MAQUINA
+    : 'MAQUINA'
+    ;
 
-
-// REGLAS DEL LEXER
-// Acá se reconocen las palabras y símbolos básicos del DSL
-
-
-
-// Palabras reservadas principales del lenguaje.
 ALFABETO
     : 'ALFABETO'
     ;
@@ -136,6 +201,32 @@ TRANSICIONES
     ;
 
 
+// Palabras usadas para las subrutinas.
+SUBRUTINA
+    : 'SUBRUTINA'
+    ;
+
+ENTRADA
+    : 'ENTRADA'
+    ;
+
+SALIDA
+    : 'SALIDA'
+    ;
+
+USA
+    : 'USA'
+    ;
+
+COMO
+    : 'COMO'
+    ;
+
+ENTERO
+    : 'ENTERO'
+    ;
+
+
 // Movimientos del cabezal.
 IZQUIERDA
     : 'L'
@@ -150,13 +241,13 @@ QUIETO
     ;
 
 
-// Símbolo blanco que estamos usando por convención.
+// Simbolo blanco por convencion.
 GUION_BAJO
     : '_'
     ;
 
 
-// Símbolos necesarios para escribir la sintaxis.
+// Caracteres usados por la sintaxis.
 DOS_PUNTOS
     : ':'
     ;
@@ -169,37 +260,51 @@ FLECHA
     : '->'
     ;
 
+PARENTESIS_IZQ
+    : '('
+    ;
 
-// Sirve principalmente para reconocer símbolos numéricos
-// como 0 y 1 dentro del alfabeto y las transiciones.
-//
-// También nos va a servir después para los parámetros
-// enteros de las subrutinas.
+PARENTESIS_DER
+    : ')'
+    ;
+
+LLAVE_IZQ
+    : '{'
+    ;
+
+LLAVE_DER
+    : '}'
+    ;
+
+
+// Reconoce numeros.
+// Nos sirve para 0 y 1 y tambien para pasar
+// parametros enteros a una subrutina.
 NUMERO
     : [0-9]+
     ;
 
 
-// Reconoce nombres de estados.
+// Identificadores para estados, maquinas,
+// subrutinas, parametros, etc.
+//
+// Ejemplos:
 // q0
 // q_add
-// q_rewind
-// qF
+// Incrementador
+// escribir_unos
 ID
     : [a-zA-Z] [a-zA-Z0-9_]*
     ;
 
 
-// Ignoramos espacios, tabulaciones y saltos de línea
-// Asii la gramtica no depende de cómo esté formateado
-// el archivo de texto.
+// Ignoramos espacios y saltos de linea.
 WS
     : [ \t\r\n]+ -> skip
     ;
 
 
-// Dejamos soporte para comentarios de una línea por si después necesitamos explicar cosas dentro de los ejemplos.
-
+// Comentarios de una linea.
 COMENTARIO
     : '//' ~[\r\n]* -> skip
     ;
