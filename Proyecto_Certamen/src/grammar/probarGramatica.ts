@@ -6,8 +6,8 @@ import * as fs from "fs";
 import { CharStream, CommonTokenStream } from "antlr4";
 
 // Estos archivos se generan automaticamente desde Turing.g4.
-import TuringLexer from "./generated/TuringLexer.ts";
-import TuringParser from "./generated/TuringParser.ts";
+import TuringLexer from "./generated/TuringLexer";
+import TuringParser from "./generated/TuringParser";
 
 
 // Si escribimos una ruta en la terminal, probamos ese archivo.
@@ -49,4 +49,4 @@ console.log("Arbol sintactico generado:\n");
 
 // Mostramos el arbol para revisar que ANTLR
 // reconocio todo el archivo correctamente.
-console.log(arbol.toStringTree(parser.ruleNames));
+console.log(arbol.toStringTree(parser.ruleNames, parser));

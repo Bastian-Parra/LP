@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "antlr": "antlr4 -Dlanguage=TypeScript -visitor src/grammar/Turing.g4 -o src/grammar/generated",
-    "build": "npm run antlr && tsc",
+    "build": "tsc",
     "start": "tsx src/index.ts",
     "test:grammar": "tsx src/grammar/probarGramatica.ts"
   },

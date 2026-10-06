@@ -17,4 +17,5 @@ BLANCO: _
 USA: escribir_unos(3) COMO llamada1
 
 TRANSICIONES:
-q0, _ -> _, N, qF
+q0, _ -> _, N, llamada1__e0
+llamada1__eF, _ -> _, N, qF

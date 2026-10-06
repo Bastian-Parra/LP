@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import { CharStream, CommonTokenStream } from "antlr4";
-import TuringLexer from "./grammar/generated/TuringLexer.ts";
-import TuringParser from "./grammar/generated/TuringParser.ts";
-import { MaquinaVisitor } from "./visitor/VisitorEngine.ts";
-import { TuringEngine } from "./simulador/TuringEngine.ts";
+import TuringLexer from "./grammar/generated/TuringLexer";
+import TuringParser from "./grammar/generated/TuringParser";
+import { MaquinaVisitor } from "./visitor/VisitorEngine";
+import { TuringEngine } from "./simulador/TuringEngine";
 
 function main() {
   const args = process.argv.slice(2);

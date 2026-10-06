@@ -1,6 +1,5 @@
 import { TablaSimbolos } from "../src/semantica/TablaSimbolos";
 import { ConstructorMaquina } from "../src/semantica/ConstructorMaquina";
-
 import {
   ExpansorSubrutinas,
   type SubrutinaExpandida,

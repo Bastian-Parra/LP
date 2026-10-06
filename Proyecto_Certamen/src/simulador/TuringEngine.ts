@@ -1,4 +1,4 @@
-import MaquinaTuring from "../types/types.ts";
+import { MaquinaTuring } from "../types/types";
 
 export class TuringEngine {
   private maquina: MaquinaTuring;
