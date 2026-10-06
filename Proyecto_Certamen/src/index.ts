@@ -1,9 +1,11 @@
 import * as fs from "fs";
+import { CharStream, CommonTokenStream } from "antlr4";
+import TuringLexer from "./grammar/generated/TuringLexer.ts";
+import TuringParser from "./grammar/generated/TuringParser.ts";
+import { MaquinaVisitor } from "./visitor/VisitorEngine.ts";
 import { TuringEngine } from "./simulador/TuringEngine.ts";
-import { MaquinaTuring, Transicion } from "./types/types.ts";
 
 function main() {
-  // leemos los argumentos de la consola
   const args = process.argv.slice(2);
   if (args.length < 2) {
     console.error("Uso incorrecto. Ejecuta:");
@@ -12,72 +14,33 @@ function main() {
   }
 
   const rutaArchivo = args[0];
-  // convertir el string "1011_" en un arreglo ['1', '0', '1', '1', '_']
   const cintaInicial = args[1].split("");
 
   console.log(`[INFO] Cargando topología desde: ${rutaArchivo}`);
   console.log(`[INFO] Cinta inicial: ${cintaInicial.join("")}\n`);
 
-  /* =========================================================
-       parte por completar
-       ========================================================= */
+  // lectura
+  const texto = fs.readFileSync(rutaArchivo, "utf-8");
+  const entrada = new CharStream(texto);
+  const lexer = new TuringLexer(entrada);
+  const tokens = new CommonTokenStream(lexer);
+  const parser = new TuringParser(tokens);
 
-  /* =========================================================
-       motor de simulacion
-       ========================================================= */
-  console.log("Usando máquina de prueba (Mock) hasta integrar ANTLR...\n");
+  // generamos el arbol
+  const tree = parser.programa();
 
-  // mock temporal: Incrementador binario -> hay que reemplazarlo
-  const transiciones = new Map<string, Transicion>();
-  transiciones.set("q0,0", { escribe: "0", mueve: "R", estadoDestino: "q0" });
-  transiciones.set("q0,1", { escribe: "1", mueve: "R", estadoDestino: "q0" });
-  transiciones.set("q0,_", {
-    escribe: "_",
-    mueve: "L",
-    estadoDestino: "q_add",
-  });
-  transiciones.set("q_add,1", {
-    escribe: "0",
-    mueve: "L",
-    estadoDestino: "q_add",
-  });
-  transiciones.set("q_add,0", {
-    escribe: "1",
-    mueve: "L",
-    estadoDestino: "q_rewind",
-  });
-  transiciones.set("q_add,_", {
-    escribe: "1",
-    mueve: "L",
-    estadoDestino: "q_rewind",
-  });
-  transiciones.set("q_rewind,0", {
-    escribe: "0",
-    mueve: "L",
-    estadoDestino: "q_rewind",
-  });
-  transiciones.set("q_rewind,1", {
-    escribe: "1",
-    mueve: "L",
-    estadoDestino: "q_rewind",
-  });
-  transiciones.set("q_rewind,_", {
-    escribe: "_",
-    mueve: "R",
-    estadoDestino: "qF",
-  });
+  // instancia de visitor usando accept
+  const visitor = new MaquinaVisitor();
+  tree.accept(visitor); // ¡Esta es la forma oficial de iniciar el recorrido!
 
-  const maquinaMock: MaquinaTuring = {
-    estadoInicial: "q0",
-    estadosFinales: new Set(["qF"]),
-    transiciones: transiciones,
-    cinta: cintaInicial,
-    posicionCabezal: 0,
-    simboloBlanco: "_",
-  };
+  // inyectamos en la cinta infinita
+  const maquinaReal = visitor.obtenerMaquinaGenerada(cintaInicial);
 
-  // ejecucion final
-  const motor = new TuringEngine(maquinaMock);
+  // instanciamos el motor
+  console.log("\n[✓] Topología validada. Iniciando Simulación...\n");
+
+  const motor = new TuringEngine(maquinaReal);
+
   motor.simulador();
 }
 

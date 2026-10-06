@@ -1,21 +1,15 @@
-import type {
-    Direccion,
-    MaquinaTuring,
-    Transicion
-} from "../types/types";
+import type { Direccion, MaquinaTuring, Transicion } from "../types/types";
 
 import { TablaSimbolos } from "./TablaSimbolos";
 import { ValidadorSemantico } from "./ValidadorSemantico";
 
-
 // Informacion temporal de una transicion
 // antes de validar la maquina completa.
 interface TransicionPendiente {
-    estadoOrigen: string;
-    simboloLeido: string;
-    transicion: Transicion;
+  estadoOrigen: string;
+  simboloLeido: string;
+  transicion: Transicion;
 }
-
 
 // ======================================================
 // CONSTRUCTOR DE MAQUINA
@@ -24,175 +18,153 @@ interface TransicionPendiente {
 // ======================================================
 
 export class ConstructorMaquina {
+  private readonly tablaSimbolos: TablaSimbolos;
 
-    private readonly tablaSimbolos: TablaSimbolos;
+  private estadoInicial: string | undefined;
 
-    private estadoInicial: string | undefined;
+  private readonly estadosFinales: Set<string>;
 
-    private readonly estadosFinales: Set<string>;
+  private readonly transicionesPendientes: TransicionPendiente[];
 
-    private readonly transicionesPendientes: TransicionPendiente[];
+  constructor() {
+    this.tablaSimbolos = new TablaSimbolos();
 
+    this.estadosFinales = new Set<string>();
 
-    constructor() {
+    this.transicionesPendientes = [];
+  }
 
-        this.tablaSimbolos = new TablaSimbolos();
+  // ======================================================
+  // ALFABETO
+  // ======================================================
 
-        this.estadosFinales = new Set<string>();
+  agregarSimbolo(simbolo: string): void {
+    this.tablaSimbolos.registrarSimbolo(simbolo);
+  }
 
-        this.transicionesPendientes = [];
+  // ======================================================
+  // ESTADOS
+  // ======================================================
+
+  agregarEstado(estado: string): void {
+    this.tablaSimbolos.registrarEstado(estado);
+  }
+
+  // ======================================================
+  // ESTADO INICIAL
+  // ======================================================
+
+  definirEstadoInicial(estado: string): void {
+    if (this.estadoInicial !== undefined) {
+      throw new Error(
+        `Error semantico: el estado inicial ya fue definido como '${this.estadoInicial}'.`,
+      );
     }
 
+    this.estadoInicial = estado;
+  }
 
-    // ======================================================
-    // ALFABETO
-    // ======================================================
+  // ======================================================
+  // ESTADOS FINALES
+  // ======================================================
 
-    agregarSimbolo(simbolo: string): void {
-        this.tablaSimbolos.registrarSimbolo(simbolo);
+  agregarEstadoFinal(estado: string): void {
+    if (this.estadosFinales.has(estado)) {
+      throw new Error(
+        `Error semantico: el estado final '${estado}' esta repetido.`,
+      );
     }
 
+    this.estadosFinales.add(estado);
+  }
 
-    // ======================================================
-    // ESTADOS
-    // ======================================================
+  // ======================================================
+  // TRANSICIONES
+  // Guarda temporalmente una transicion.
+  // La validacion completa se hace en construir().
+  // ======================================================
 
-    agregarEstado(estado: string): void {
-        this.tablaSimbolos.registrarEstado(estado);
+  agregarTransicion(
+    estadoOrigen: string,
+    simboloLeido: string,
+    estadoDestino: string,
+    simboloEscrito: string,
+    movimiento: Direccion,
+  ): void {
+    this.transicionesPendientes.push({
+      estadoOrigen,
+      simboloLeido,
+      transicion: {
+        estadoDestino,
+        escribe: simboloEscrito,
+        mueve: movimiento,
+      },
+    });
+  }
+
+  // ======================================================
+  // CONSTRUIR
+  // Valida todo y devuelve la maquina que necesita Bastian.
+  // ======================================================
+
+  construir(
+    cintaInicial: string | string[] = "",
+    posicionCabezal: number = 0,
+    simboloBlanco: string = "_",
+  ): MaquinaTuring {
+    if (this.estadoInicial === undefined) {
+      throw new Error("Error semantico: no se definio un estado inicial.");
     }
 
+    const validador = new ValidadorSemantico(this.tablaSimbolos);
 
-    // ======================================================
-    // ESTADO INICIAL
-    // ======================================================
+    // Revisamos estructura general.
+    validador.validarSimboloBlanco(simboloBlanco);
 
-    definirEstadoInicial(estado: string): void {
+    validador.validarEstadoInicial(this.estadoInicial);
 
-        if (this.estadoInicial !== undefined) {
-            throw new Error(
-                `Error semantico: el estado inicial ya fue definido como '${this.estadoInicial}'.`
-            );
-        }
+    validador.validarEstadosFinales(this.estadosFinales);
 
-        this.estadoInicial = estado;
+    // Validamos todas las transiciones.
+    for (const pendiente of this.transicionesPendientes) {
+      validador.registrarTransicion(
+        pendiente.estadoOrigen,
+        pendiente.simboloLeido,
+        pendiente.transicion,
+      );
     }
 
+    // Convertimos la cinta a arreglo.
+    const cinta =
+      typeof cintaInicial === "string"
+        ? Array.from(cintaInicial)
+        : [...cintaInicial];
 
-    // ======================================================
-    // ESTADOS FINALES
-    // ======================================================
-
-    agregarEstadoFinal(estado: string): void {
-
-        if (this.estadosFinales.has(estado)) {
-            throw new Error(
-                `Error semantico: el estado final '${estado}' esta repetido.`
-            );
-        }
-
-        this.estadosFinales.add(estado);
+    // Una cinta vacia comienza con blanco.
+    if (cinta.length === 0) {
+      cinta.push(simboloBlanco);
     }
 
+    validador.validarCintaInicial(cinta);
 
-    // ======================================================
-    // TRANSICIONES
-    // Guarda temporalmente una transicion.
-    // La validacion completa se hace en construir().
-    // ======================================================
-
-    agregarTransicion(
-        estadoOrigen: string,
-        simboloLeido: string,
-        estadoDestino: string,
-        simboloEscrito: string,
-        movimiento: Direccion
-    ): void {
-
-        this.transicionesPendientes.push({
-            estadoOrigen,
-            simboloLeido,
-            transicion: {
-                estadoDestino,
-                escribe: simboloEscrito,
-                mueve: movimiento
-            }
-        });
+    // Evitamos comenzar fuera de la cinta.
+    if (
+      !Number.isInteger(posicionCabezal) ||
+      posicionCabezal < 0 ||
+      posicionCabezal >= cinta.length
+    ) {
+      throw new Error(
+        `Error semantico: posicion inicial del cabezal invalida (${posicionCabezal}).`,
+      );
     }
 
-
-    // ======================================================
-    // CONSTRUIR
-    // Valida todo y devuelve la maquina que necesita Bastian.
-    // ======================================================
-
-    construir(
-        cintaInicial: string | string[] = "",
-        posicionCabezal: number = 0,
-        simboloBlanco: string = "_"
-    ): MaquinaTuring {
-
-        if (this.estadoInicial === undefined) {
-            throw new Error(
-                "Error semantico: no se definio un estado inicial."
-            );
-        }
-
-        const validador = new ValidadorSemantico(
-            this.tablaSimbolos
-        );
-
-        // Revisamos estructura general.
-        validador.validarSimboloBlanco(simboloBlanco);
-
-        validador.validarEstadoInicial(
-            this.estadoInicial
-        );
-
-        validador.validarEstadosFinales(
-            this.estadosFinales
-        );
-
-        // Validamos todas las transiciones.
-        for (const pendiente of this.transicionesPendientes) {
-
-            validador.registrarTransicion(
-                pendiente.estadoOrigen,
-                pendiente.simboloLeido,
-                pendiente.transicion
-            );
-        }
-
-        // Convertimos la cinta a arreglo.
-        const cinta =
-            typeof cintaInicial === "string"
-                ? Array.from(cintaInicial)
-                : [...cintaInicial];
-
-        // Una cinta vacia comienza con blanco.
-        if (cinta.length === 0) {
-            cinta.push(simboloBlanco);
-        }
-
-        validador.validarCintaInicial(cinta);
-
-        // Evitamos comenzar fuera de la cinta.
-        if (
-            !Number.isInteger(posicionCabezal) ||
-            posicionCabezal < 0 ||
-            posicionCabezal >= cinta.length
-        ) {
-            throw new Error(
-                `Error semantico: posicion inicial del cabezal invalida (${posicionCabezal}).`
-            );
-        }
-
-        return {
-            estadoInicial: this.estadoInicial,
-            estadosFinales: new Set(this.estadosFinales),
-            transiciones: validador.obtenerTransiciones(),
-            cinta,
-            posicionCabezal,
-            simboloBlanco
-        };
-    }
+    return {
+      estadoInicial: this.estadoInicial,
+      estadosFinales: new Set(this.estadosFinales),
+      transiciones: validador.obtenerTransiciones(),
+      cinta,
+      posicionCabezal,
+      simboloBlanco,
+    };
+  }
 }
