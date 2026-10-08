@@ -43,12 +43,20 @@ export class ExpansorSubrutinas {
     constructor: ConstructorMaquina,
     subrutina: SubrutinaExpandida,
     nombreInstancia: string,
+    cantidad: number = 1,
   ): ResultadoInsercion {
     if (nombreInstancia.trim().length === 0) {
       throw new Error(
         "Error semantico: la instancia de la subrutina necesita un nombre.",
       );
     }
+
+    if (!Number.isInteger(cantidad) || cantidad <= 0) {
+      throw new Error(
+        "Error semantico: el parametro de la subrutina debe ser un entero mayor que 0.",
+      );
+    }
+
 
     const estadosOriginales = new Set(subrutina.estados);
 
@@ -74,25 +82,63 @@ export class ExpansorSubrutinas {
       }
     }
 
-    const mapaEstados = new Map<string, string>();
+    // Guardamos los mapas de estados de cada repeticion.
+    const mapasRepeticiones: Map<string, string>[] = [];
 
-    // Renombramos los estados.
-    // Ejemplo:
-    // q0 -> llamada1__q0
-    for (const estado of subrutina.estados) {
-      const nuevoEstado = `${nombreInstancia}__${estado}`;
+    // Esto sirve para evitar agregar un mismo estado dos veces.
+    const estadosAgregados = new Set<string>();
 
-      mapaEstados.set(estado, nuevoEstado);
+    // Creamos tantas copias de la subrutina como indique el parametro.
+    for (let i = 0; i < cantidad; i++) {
+      const mapa = new Map<string, string>();
 
-      constructor.agregarEstado(nuevoEstado);
+      for (const estado of subrutina.estados) {
+        let nuevoEstado: string;
+
+        // La primera entrada conserva el nombre normal.
+        if (estado === subrutina.estadoEntrada) {
+          if (i === 0) {
+            nuevoEstado = `${nombreInstancia}__${estado}`;
+          } else {
+            nuevoEstado = `${nombreInstancia}__rep${i + 1}__${estado}`;
+        }
+      }
+
+      // Si es un estado de salida y aun quedan repeticiones,
+      // lo conectamos con la entrada de la siguiente repeticion.
+      else if (subrutina.estadosSalida.includes(estado)) {
+        if (i === cantidad - 1) {
+          nuevoEstado = `${nombreInstancia}__${estado}`;
+        } else {
+          nuevoEstado =
+          `${nombreInstancia}__rep${i + 2}__${subrutina.estadoEntrada}`;
+        }
+      }
+
+      // Los estados internos tambien reciben nombres diferentes.
+      else {
+        nuevoEstado =
+        `${nombreInstancia}__rep${i + 1}__${estado}`;
+      }
+
+      mapa.set(estado, nuevoEstado);
+
+      if (!estadosAgregados.has(nuevoEstado)) {
+        constructor.agregarEstado(nuevoEstado);
+        estadosAgregados.add(nuevoEstado);
+      }
     }
 
-    // Copiamos las transiciones usando
-    // los nuevos nombres.
-    for (const regla of subrutina.transiciones) {
-      const origen = mapaEstados.get(regla.estadoOrigen);
+    mapasRepeticiones.push(mapa);
+  }
 
-      const destino = mapaEstados.get(regla.estadoDestino);
+  // Copiamos las transiciones para cada repeticion
+  for (let i = 0; i < cantidad; i++) {
+    const mapa = mapasRepeticiones[i];
+
+    for (const regla of subrutina.transiciones) {
+      const origen = mapa.get(regla.estadoOrigen);
+      const destino = mapa.get(regla.estadoDestino);
 
       if (origen === undefined) {
         throw new Error(
@@ -114,15 +160,35 @@ export class ExpansorSubrutinas {
         regla.mueve,
       );
     }
-
-    return {
-      estadoEntrada: mapaEstados.get(subrutina.estadoEntrada)!,
-
-      estadosSalida: subrutina.estadosSalida.map(
-        (estado) => mapaEstados.get(estado)!,
-      ),
-
-      mapaEstados,
-    };
   }
-}
+
+  // Este mapa deja la entrada en la primera repeticion y las salidas en la ultima
+  const mapaEstados = new Map<string, string>();
+
+  for (const estado of subrutina.estados) {
+    if (subrutina.estadosSalida.includes(estado)) {
+      mapaEstados.set(
+        estado,
+        mapasRepeticiones[cantidad - 1].get(estado)!,
+      );
+    } else {
+      mapaEstados.set(
+        estado,
+        mapasRepeticiones[0].get(estado)!,
+      );
+    }
+  }
+
+  return {
+    estadoEntrada:
+      mapasRepeticiones[0].get(subrutina.estadoEntrada)!,
+
+    estadosSalida: subrutina.estadosSalida.map(
+      (estado) =>
+        mapasRepeticiones[cantidad - 1].get(estado)!,
+    ),
+
+    mapaEstados,
+  };
+    }
+  }

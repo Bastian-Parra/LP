@@ -1,6 +1,5 @@
 grammar Turing;
 
-
 // Un archivo puede tener subrutinas y una o más maquinas
 
 programa
@@ -80,7 +79,7 @@ blanco
 //     SALIDA: eF
 //
 //     TRANSICIONES:
-//     e0, _ -> 1, R, eF
+//     e0, _ -> eF, 1, R
 // }
 //
 // La gramatica solamente reconoce la estructura.
@@ -139,15 +138,15 @@ transiciones
     ;
 
 
-// q0, 0 -> 0, R, q0
+// q0, 0 -> q0, 0, R
 //
 // estadoActual, simboloLeido
 // ->
-// simboloEscrito, movimiento, estadoDestino
+// estadoNuevo, simboloEscrito, movimiento
 transicion
     : ID COMA simbolo
       FLECHA
-      simbolo COMA direccion COMA ID
+      ID COMA simbolo COMA direccion
     ;
 
 

@@ -55,7 +55,7 @@ npm start ejemplos/incrementador.txt "1011_"
 npm start ejemplos/subrutina.txt "____"
 ```
 
-Extra: Si solo se quiere probar que un archivo cumpla la sintaxis sin correr el motor, se puede usar npm run test:grammar ejemplos/incrementador.txt para ver el árbol.
+Extra: Si solo se quiere probar que un archivo cumpla la sintaxis sin correr el motor, se puede usar npm run test:grammar -- ejemplos/incrementador.txt para ver el árbol.
 
 ## 5. Sintáxis de nuestro DSL
 ```bash
@@ -67,8 +67,8 @@ FINAL: qF
 BLANCO: _
 
 TRANSICIONES:
-q0, 1 -> 0, R, q0
-q0, _ -> _, N, qF
+q0, 1 -> q0, 0, R
+q0, _ -> qF, _, N
 ```
 ### Llamada a Subrutinas
 Si queremos usar subrutinas, se declaran arriba y se llaman con USA: y COMO:
@@ -79,7 +79,8 @@ SUBRUTINA: escribir_unos(n: ENTERO) {
   ENTRADA: e0
   SALIDA: eF
   TRANSICIONES:
-  e0, _ -> 1, R, eF
+  TRANSICIONES:
+  e0, _ -> eF, 1, R
 }
 
 MAQUINA: Principal
@@ -87,8 +88,8 @@ MAQUINA: Principal
 USA: escribir_unos(3) COMO llamada1
 
 TRANSICIONES:
-q0, _ -> _, N, llamada1__e0
-llamada1__eF, _ -> _, N, qF
+q0, _ -> llamada1__e0, _, N
+llamada1__eF, _ -> qF, _, N
 ```
 
 ## 6. Supuestos y Decisiones de Diseño

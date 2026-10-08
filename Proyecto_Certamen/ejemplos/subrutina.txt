@@ -4,7 +4,7 @@ ENTRADA: e0
 SALIDA: eF
 
 TRANSICIONES:
-e0, _ -> 1, R, eF
+e0, _ -> eF, 1, R
 }
 
 MAQUINA: PruebaSubrutina
@@ -17,5 +17,5 @@ BLANCO: _
 USA: escribir_unos(3) COMO llamada1
 
 TRANSICIONES:
-q0, _ -> _, N, llamada1__e0
-llamada1__eF, _ -> _, N, qF
+q0, _ -> llamada1__e0, _, N
+llamada1__eF, _ -> qF, _, N

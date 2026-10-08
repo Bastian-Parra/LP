@@ -704,15 +704,15 @@ export default class TuringParser extends Parser {
 			this.state = 143;
 			this.match(TuringParser.FLECHA);
 			this.state = 144;
-			this.simbolo();
+			this.match(TuringParser.ID);
 			this.state = 145;
 			this.match(TuringParser.COMA);
 			this.state = 146;
-			this.direccion();
+			this.simbolo();
 			this.state = 147;
 			this.match(TuringParser.COMA);
 			this.state = 148;
-			this.match(TuringParser.ID);
+			this.direccion();
 			}
 		}
 		catch (re) {
@@ -836,8 +836,8 @@ export default class TuringParser extends Parser {
 	131,5,26,0,0,131,27,1,0,0,0,132,133,5,7,0,0,133,137,5,18,0,0,134,136,3,
 	30,15,0,135,134,1,0,0,0,136,139,1,0,0,0,137,135,1,0,0,0,137,138,1,0,0,0,
 	138,29,1,0,0,0,139,137,1,0,0,0,140,141,5,26,0,0,141,142,5,19,0,0,142,143,
-	3,34,17,0,143,144,5,20,0,0,144,145,3,34,17,0,145,146,5,19,0,0,146,147,3,
-	32,16,0,147,148,5,19,0,0,148,149,5,26,0,0,149,31,1,0,0,0,150,151,7,0,0,
+	3,34,17,0,143,144,5,20,0,0,144,145,5,26,0,0,145,146,5,19,0,0,146,147,3,
+	34,17,0,147,148,5,19,0,0,148,149,3,32,16,0,149,31,1,0,0,0,150,151,7,0,0,
 	0,151,33,1,0,0,0,152,153,7,1,0,0,153,35,1,0,0,0,7,38,40,45,55,73,85,137];
 
 	private static __ATN: ATN;

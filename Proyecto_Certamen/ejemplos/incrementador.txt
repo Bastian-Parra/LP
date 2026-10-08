@@ -5,12 +5,12 @@ FINAL: qF
 BLANCO: _
 
 TRANSICIONES:
-q0, 0 -> 0, R, q0
-q0, 1 -> 1, R, q0
-q0, _ -> _, L, q_add
-q_add, 1 -> 0, L, q_add
-q_add, 0 -> 1, L, q_rewind
-q_add, _ -> 1, L, q_rewind
-q_rewind, 0 -> 0, L, q_rewind
-q_rewind, 1 -> 1, L, q_rewind
-q_rewind, _ -> _, R, qF
+q0, 0 -> q0, 0, R
+q0, 1 -> q0, 1, R
+q0, _ -> q_add, _, L
+q_add, 1 -> q_add, 0, L
+q_add, 0 -> q_rewind, 1, L
+q_add, _ -> q_rewind, 1, L
+q_rewind, 0 -> q_rewind, 0, L
+q_rewind, 1 -> q_rewind, 1, L
+q_rewind, _ -> qF, _, R

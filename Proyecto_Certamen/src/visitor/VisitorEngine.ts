@@ -38,9 +38,9 @@ export class MaquinaVisitor extends TuringVisitor<void> {
           transiciones.push({
             estadoOrigen: child.children[0].getText(),
             simboloLeido: child.children[2].getText(),
-            simboloEscrito: child.children[4].getText(),
-            mueve: child.children[6].getText() as Direccion,
-            estadoDestino: child.children[8].getText(),
+            estadoDestino: child.children[4].getText(),
+            simboloEscrito: child.children[6].getText(),
+            mueve: child.children[8].getText() as Direccion,
           });
         }
       }
@@ -96,20 +96,21 @@ export class MaquinaVisitor extends TuringVisitor<void> {
   // ==========================================
   visitUsoSubrutina = (ctx: any): void => {
     const nombreSub = ctx.children[2].getText();
+    const cantidad = Number(ctx.children[4].getText());
     const alias = ctx.children[7].getText();
 
     const sub = this.subrutinasDefinidas.get(nombreSub);
     if (sub) {
-      this.expansor.insertar(this.constructorMaquina, sub, alias);
+      this.expansor.insertar(this.constructorMaquina, sub, alias, cantidad);
     }
   };
 
   visitTransicion = (ctx: any): void => {
     const origen = ctx.children[0].getText();
     const leido = ctx.children[2].getText();
-    const escrito = ctx.children[4].getText();
-    const mov = ctx.children[6].getText() as Direccion;
-    const destino = ctx.children[8].getText();
+    const destino = ctx.children[4].getText();
+    const escrito = ctx.children[6].getText();
+    const mov = ctx.children[8].getText() as Direccion;
 
     this.constructorMaquina.agregarTransicion(
       origen,
